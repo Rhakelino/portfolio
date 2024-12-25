@@ -170,7 +170,7 @@ function App() {
       <div className="flex flex-col m-10">
         <h1 className="text-3xl font-semibold mb-4">Skillset</h1>
         <p className="mb-8">Here are some of the skills I possess:</p>
-        <div className="flex flex-col gap-3 md:flex-row">
+        <div className="flex flex-col gap-8 md:flex-row">
           <div className="bg-base-200 dark:bg-transparent dark:border image-full rounded-xl shadow-xl h-full flex-1">
             <div className="card-body">
               <h2 className="card-title">Frontend</h2>
@@ -278,7 +278,7 @@ function App() {
       <div className="flex flex-col m-10">
         <h1 className="text-3xl font-semibold mb-4">Certificates</h1>
         <p className="mb-8">Here are some certifications I have acquired:</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Belajar Dasar Pemrograman Web */}
           <div className="bg-base-200 rounded-xl dark:bg-transparent dark:border lg:card-side shadow-xl">
             <figure>
