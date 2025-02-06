@@ -41,7 +41,7 @@ function App() {
               I am a passionate web developer with a love for creating innovative and user-friendly experiences. My journey in the tech world has allowed me to work on various exciting projects, and I am always eager to learn and improve.
             </p>
 
-            <a href="/files/CV_AlmalikulMulkiRhakelino.pdf" download className="btn btn-primary">Download CV</a>
+            <a href="/files/22101152630273_AlmalikulMulkiRhakelino_Magang.pdf" download className="btn btn-primary">Download CV</a>
           </div>
         </div>
       </div>
