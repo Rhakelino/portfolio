@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import './App.css'
 import { FaGithub } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
+import bgImage from '/images/bg.jpg';
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
       <div
         className="hero min-h-screen"
         style={{
-          backgroundImage: "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
+          backgroundImage: `url(${bgImage})`, // Menggunakan gambar yang diimpor
         }}>
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content text-neutral-content text-center">
@@ -145,7 +146,7 @@ function App() {
           <div className="flex flex-col w-full md:w-3/5">
             <h2 className="text-xl font-semibold mb-3">Juju News - Website Baca Berita</h2>
             <p className="text-gray-400 mb-2 opacity-80">
-            Juju News adalah situs web yang menyediakan berita terkini dari berbagai kategori, mulai dari teknologi, hiburan, hingga olahraga. Pengguna dapat dengan cepat mengakses berita terbaru dan informasi yang relevan.
+              Juju News adalah situs web yang menyediakan berita terkini dari berbagai kategori, mulai dari teknologi, hiburan, hingga olahraga. Pengguna dapat dengan cepat mengakses berita terbaru dan informasi yang relevan.
             </p>
             <div className="flex gap-1 mb-3 flex-wrap">
               <button className="btn-sm rounded-md bg-base-200 dark:bg-transparent dark:border">React</button>
