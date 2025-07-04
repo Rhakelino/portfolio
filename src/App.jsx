@@ -8,6 +8,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import "./App.css";
+import Header from "./components/Header";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(
@@ -137,54 +138,8 @@ function App() {
         </div>
 
         {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="min-h-screen flex items-center justify-center"
-        >
-          <div className="text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
-              Almalikul Mulki Rhakelino
-            </h1>
 
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Passionate web developer crafting innovative digital experiences
-              with modern technologies.
-            </p>
-
-            <div className="flex justify-center gap-4">
-              <a
-                href="/files/22101152630273_AlmalikulMulkiRhakelino_Magang.pdf"
-                download
-                className="btn btn-primary shadow-lg hover:scale-105 transition"
-              >
-                Download CV
-              </a>
-
-              <div className="flex gap-4 items-center">
-                <a
-                  href="#"
-                  className="text-2xl hover:text-purple-600 transition"
-                >
-                  <FaLinkedin />
-                </a>
-                <a
-                  href="#"
-                  className="text-2xl hover:text-purple-600 transition"
-                >
-                  <FaEnvelope />
-                </a>
-                <a
-                  href="#"
-                  className="text-2xl hover:text-purple-600 transition"
-                >
-                  <FaGithub />
-                </a>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        <Header />
 
         {/* Projects Section */}
         <section className="py-16">
