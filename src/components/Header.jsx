@@ -105,7 +105,7 @@ const HeaderParticles = () => {
           </p>
           <div className="flex justify-center gap-4">
             <a
-              href="/files/22101152630273_AlmalikulMulkiRhakelino_Magang.pdf"
+              href="/files/CV_ALMALIKUL_RHAKELINO_2025.pdf"
               download
               className="btn btn-primary shadow-lg hover:scale-105 transition"
             >
@@ -113,13 +113,16 @@ const HeaderParticles = () => {
             </a>
 
             <div className="flex gap-4 items-center">
-              <a href="#" className="text-2xl hover:text-purple-600 transition">
+              <a href="https://www.linkedin.com/in/almalikul-mulki-rhakelino-a91104291/" target="_blank" className="text-2xl hover:text-purple-600 transition">
                 <FaLinkedin />
               </a>
-              <a href="#" className="text-2xl hover:text-purple-600 transition">
+              <a
+                href="mailto:almalikulrhakelino@gmail.com"
+                className="text-2xl hover:text-purple-600 transition"
+              >
                 <FaEnvelope />
               </a>
-              <a href="#" className="text-2xl hover:text-purple-600 transition">
+              <a href="https://github.com/Rhakelino" target="_blank" className="text-2xl hover:text-purple-600 transition">
                 <FaGithub />
               </a>
             </div>
