@@ -51,7 +51,7 @@ const ProjectSection = () => {
 
   return (
     <section className="py-16">
-      <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+      <h2 className="text-4xl py-2 font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
         My Projects
       </h2>
 

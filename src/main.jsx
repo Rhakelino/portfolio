@@ -7,6 +7,7 @@ import App from './App.jsx'
 import Login from './Pages/login.jsx'
 import Dashboard from './Pages/dashboard.jsx'
 import ManageProjects from './Pages/manage-projects.jsx'
+import ManageSkills from './Pages/manage-skills.jsx'
 
 const Root = () => {
   return (
@@ -16,6 +17,7 @@ const Root = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/manage-projects" element={<ManageProjects />} />
+          <Route path="/manage-skills" element={<ManageSkills />} />
           <Route path="/" element={<App />} />
           {/* Redirect ke login jika rute tidak ditemukan */}
           <Route path="*" element={<Navigate to="/login" replace />} />
