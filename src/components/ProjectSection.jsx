@@ -1,7 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaEye } from "react-icons/fa";
-import { supabase } from "../supabaseClient"; // Sesuaikan path import Supabase client
+import { supabase } from "../supabaseClient";
+
+// Komponen Skeleton
+const ProjectSkeleton = () => {
+  return (
+    <section className="py-16">
+      <div className="text-center mb-12">
+        <div className="h-12 w-64 mx-auto bg-gray-300 dark:bg-neutral-700 animate-pulse rounded-lg"></div>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[1, 2, 3].map((item) => (
+          <div 
+            key={item}
+            className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg overflow-hidden animate-pulse"
+          >
+            <div className="w-full h-48 bg-gray-300 dark:bg-neutral-700"></div>
+            <div className="p-6">
+              <div className="h-6 w-3/4 bg-gray-300 dark:bg-neutral-700 mb-2"></div>
+              <div className="h-4 w-full bg-gray-300 dark:bg-neutral-700 mb-4"></div>
+              <div className="flex gap-2 mb-4">
+                <div className="h-4 w-16 bg-gray-300 dark:bg-neutral-700 rounded-full"></div>
+                <div className="h-4 w-16 bg-gray-300 dark:bg-neutral-700 rounded-full"></div>
+              </div>
+              <div className="flex gap-4">
+                <div className="h-8 w-24 bg-gray-300 dark:bg-neutral-700 rounded-lg"></div>
+                <div className="h-8 w-24 bg-gray-300 dark:bg-neutral-700 rounded-lg"></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 const ProjectSection = () => {
   const [projects, setProjects] = useState([]);
@@ -33,14 +66,12 @@ const ProjectSection = () => {
     }
   };
 
+  // Gunakan ProjectSkeleton saat loading
   if (loading) {
-    return (
-      <section className="py-16 flex justify-center items-center">
-        <div className="loading loading-spinner loading-lg text-primary"></div>
-      </section>
-    );
+    return <ProjectSkeleton />;
   }
 
+  // Error State
   if (error) {
     return (
       <section className="py-16 text-center">

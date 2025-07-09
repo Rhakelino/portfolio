@@ -1,6 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { supabase } from '../supabaseClient' // Sesuaikan path imports
+import { supabase } from '../supabaseClient'
+
+// Komponen Skeleton
+const SkillsSkeleton = () => {
+  return (
+    <section className="py-16">
+      <div className="text-center mb-12">
+        <div className="h-12 w-64 mx-auto bg-gray-300 dark:bg-neutral-700 animate-pulse rounded-lg"></div>
+      </div>
+      <div className="grid md:grid-cols-3 gap-8">
+        {['Frontend', 'Backend', 'Mobile'].map((category, index) => (
+          <div
+            key={index}
+            className="bg-white dark:bg-neutral-900 rounded-2xl p-8 shadow-lg animate-pulse"
+          >
+            <div className="h-8 w-3/4 mx-auto bg-gray-300 dark:bg-neutral-700 mb-6 rounded-lg"></div>
+            <div className="grid grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <div key={item} className="flex flex-col items-center">
+                  <div className="bg-gray-300 dark:bg-neutral-700 p-4 rounded-full mb-2 w-16 h-16"></div>
+                  <div className="h-4 w-20 bg-gray-300 dark:bg-neutral-700 rounded-lg"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 const SkillsSection = () => {
   const [skills, setSkills] = useState({
@@ -45,13 +74,9 @@ const SkillsSection = () => {
     fetchSkills()
   }, [])
 
-  // Loading State
+  // Loading State - Gunakan SkillsSkeleton
   if (loading) {
-    return (
-      <section className="py-16 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-purple-600"></div>
-      </section>
-    )
+    return <SkillsSkeleton />;
   }
 
   // Error State
@@ -64,6 +89,7 @@ const SkillsSection = () => {
       </section>
     )
   }
+
   return (
     <section className="py-16">
       <h2 className="text-4xl py-2 font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
