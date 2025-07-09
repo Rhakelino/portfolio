@@ -3,14 +3,14 @@ import { supabase } from '../supabaseClient'
 import { v4 as uuidv4 } from 'uuid'
 
 // Modal Komponen
-const EditProjectModal = ({ 
-  project, 
-  isOpen, 
-  onClose, 
-  onUpdate, 
+const EditProjectModal = ({
+  project,
+  isOpen,
+  onClose,
+  onUpdate,
   uploading,
   imagePreview,
-  handleImageUpload 
+  handleImageUpload
 }) => {
   const [editedProject, setEditedProject] = useState({
     title: '',
@@ -40,7 +40,7 @@ const EditProjectModal = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 w-full max-w-2xl">
         <h2 className="text-3xl font-bold mb-6 text-white">Edit Proyek</h2>
-        
+
         <form onSubmit={(e) => onUpdate(e, editedProject)} className="space-y-4">
           <div className="grid md:grid-cols-3 gap-4">
             {/* Image Upload Section */}
@@ -137,6 +137,8 @@ const EditProjectModal = ({
   )
 }
 
+
+
 // Komponen Utama ManageProjects
 const ManageProjects = () => {
   const [projects, setProjects] = useState([])
@@ -199,9 +201,9 @@ const ManageProjects = () => {
 
       const { data, error: uploadError } = await supabase.storage
         .from('project-images')
-        .upload(filePath, file, { 
+        .upload(filePath, file, {
           cacheControl: '3600',
-          upsert: true 
+          upsert: true
         })
 
       if (uploadError) {
@@ -414,15 +416,75 @@ const ManageProjects = () => {
       }
     }
   }
+  const NotificationModal = ({ message, onClose }) => {
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+        <div
+          className="
+          bg-gradient-to-r from-purple-500 to-indigo-600 
+          text-white 
+          px-10 py-6 
+          rounded-xl 
+          shadow-2xl 
+          flex 
+          items-center 
+          space-x-4
+          animate-bounce
+        "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span className="text-lg font-semibold">{message}</span>
+          <button
+            onClick={onClose}
+            className="ml-4 hover:bg-white/20 rounded-full p-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const closeNotification = () => {
+    setNotification(null)
+  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
       <div className="container mx-auto">
         {/* Notification */}
         {notification && (
-          <div className="bg-green-500 text-white p-2 rounded text-center mb-4">
-            {notification}
-          </div>
+          <NotificationModal
+            message={notification}
+            onClose={closeNotification}
+          />
         )}
 
         <h1 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-500">
@@ -516,49 +578,54 @@ const ManageProjects = () => {
         </form>
 
         {/* Projects List */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden"
-            >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h2 className="text-2xl font-bold mb-2">{project.title}</h2>
-                <p className="text-gray-400 mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, index) => (
-                    <span
-                      key={index}
-                      className="bg-gray-700 px-2 py-1 rounded-md text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold mb-8 text-center">My Projects</h1>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden relative"
+              >
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute top-4 right-4 flex space-x-2">
+                  <button
+                    onClick={() => handleEditProject(project)}
+                    className="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.379-8.379-2.828-2.828z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => handleDeleteProject(project.id)}
+                    className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  </button>
                 </div>
-                <div className="flex justify-between">
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleEditProject(project)}
-                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProject(project.id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-2">{project.title}</h2>
+                  <p className="text-gray-400 mb-4">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.technologies.map((tech, index) => (
+                      <span
+                        key={index}
+                        className="bg-gray-700 px-2 py-1 rounded-md text-sm"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Edit Project Modal */}
@@ -580,3 +647,4 @@ const ManageProjects = () => {
 }
 
 export default ManageProjects
+
