@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaEye } from "react-icons/fa";
+import { FaGithub, FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { supabase } from "../supabaseClient";
 
-// Komponen Skeleton
+// Komponen Skeleton (tetap sama)
 const ProjectSkeleton = () => {
   return (
     <section className="py-16">
@@ -40,18 +40,50 @@ const ProjectSection = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // State untuk pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProjects, setTotalProjects] = useState(0);
+  const projectsPerPage = 6;
+
+  useEffect(() => {
+    fetchTotalProjects();
+  }, []);
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [currentPage]);
+
+  const fetchTotalProjects = async () => {
+    try {
+      const { count, error } = await supabase
+        .from('projects')
+        .select('*', { count: 'exact' });
+
+      if (error) {
+        throw error;
+      }
+
+      setTotalProjects(count || 0);
+    } catch (error) {
+      console.error("Error fetching total projects:", error);
+    }
+  };
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
+      
+      // Hitung range untuk pagination
+      const from = (currentPage - 1) * projectsPerPage;
+      const to = from + projectsPerPage - 1;
+
       const { data, error } = await supabase
         .from('projects')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('order', { ascending: true })
+        .order('created_at', { ascending: false })
+        .range(from, to);
 
       if (error) {
         throw error;
@@ -65,6 +97,16 @@ const ProjectSection = () => {
       setLoading(false);
     }
   };
+
+  // Fungsi untuk mengubah halaman
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // Hitung total halaman
+  const totalPages = Math.ceil(totalProjects / projectsPerPage);
 
   // Gunakan ProjectSkeleton saat loading
   if (loading) {
@@ -91,55 +133,80 @@ const ProjectSection = () => {
           No projects available
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <motion.div
-              key={project.id}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg overflow-hidden"
-            >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  {project.description}
-                </p>
-                <div className="flex gap-2 mb-4 flex-wrap">
-                  {project.technologies.map((tech, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-1 bg-purple-100 dark:bg-neutral-800 text-xs rounded-full"
+        <>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project) => (
+              <motion.div
+                key={project.id}
+                whileHover={{ scale: 1.05 }}
+                className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg overflow-hidden"
+              >
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                    {project.description}
+                  </p>
+                  <div className="flex gap-2 mb-4 flex-wrap">
+                    {project.technologies.map((tech, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 bg-purple-100 dark:bg-neutral-800 text-xs rounded-full"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex gap-4">
+                    <a
+                      href={project.github_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-outline btn-sm"
                     >
-                      {tech}
-                    </span>
-                  ))}
+                      <FaGithub className="mr-2" /> GitHub
+                    </a>
+                    <a
+                      href={project.live_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary btn-sm dark:btn-warning"
+                    >
+                      <FaEye className="mr-2" /> Live Demo
+                    </a>
+                  </div>
                 </div>
-                <div className="flex gap-4">
-                  <a
-                    href={project.github_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-outline btn-sm"
-                  >
-                    <FaGithub className="mr-2" /> GitHub
-                  </a>
-                  <a
-                    href={project.live_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary btn-sm dark:btn-warning"
-                  >
-                    <FaEye className="mr-2" /> Live Demo
-                  </a>
-                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-8 space-x-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="btn btn-outline btn-primary"
+              >
+                <FaChevronLeft className="mr-2" /> Previous
+              </button>
+              <div className="btn btn-ghost">
+                Page {currentPage} of {totalPages}
               </div>
-            </motion.div>
-          ))}
-        </div>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="btn btn-outline btn-primary"
+              >
+                Next <FaChevronRight className="ml-2" />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </section>
   );

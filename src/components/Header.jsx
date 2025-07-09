@@ -100,8 +100,7 @@ const HeaderParticles = () => {
           </h1>
 
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Passionate web developer crafting innovative digital experiences
-            with modern technologies.
+            Pengembang web yang bersemangat menciptakan pengalaman digital inovatif dengan teknologi modern.
           </p>
           <div className="flex justify-center gap-4">
             <a

@@ -168,8 +168,8 @@ const ProjectSkeleton = () => {
         {/* Projects List Skeleton */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((item) => (
-            <div
-              key={item}
+            <div 
+              key={item} 
               className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden animate-pulse"
             >
               <div className="w-full h-48 bg-gray-700"></div>
@@ -208,7 +208,7 @@ const ManageProjects = () => {
     liveLink: ''
   })
 
-  const [isLoading, setIsLoading] = useState(true)
+const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchProjectsWithDelay = async () => {
@@ -216,7 +216,7 @@ const ManageProjects = () => {
       try {
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1500))
-
+        
         const { data, error } = await supabase
           .from('projects')
           .select('*')
