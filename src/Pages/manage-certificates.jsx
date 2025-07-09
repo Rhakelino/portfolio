@@ -312,11 +312,96 @@ const ManageCertificates = () => {
             </div>
         )
     }
-
     const closeNotification = () => {
         setNotification(null)
     }
 
+    const CertificateSkeleton = () => {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
+                <div className="container mx-auto">
+                    {/* Skeleton for Add Certificate Form */}
+                    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 mb-8 animate-pulse">
+                        <div className="grid md:grid-cols-3 gap-4">
+                            {/* Image Upload Skeleton */}
+                            <div className="md:col-span-1">
+                                <div className="bg-gray-700 rounded-lg p-4 flex flex-col items-center">
+                                    <div className="w-full h-48 bg-gray-600 rounded-lg mb-4"></div>
+                                    <div className="w-full h-10 bg-gray-600 rounded-lg"></div>
+                                </div>
+                            </div>
+
+                            {/* Certificate Details Skeleton */}
+                            <div className="md:col-span-2 grid grid-cols-2 gap-4">
+                                <div className="col-span-2 h-12 bg-gray-700 rounded-lg"></div>
+                                <div className="h-12 bg-gray-700 rounded-lg"></div>
+                                <div className="h-12 bg-gray-700 rounded-lg"></div>
+                                <div className="col-span-2 h-12 bg-gray-700 rounded-lg"></div>
+                                <div className="col-span-2 h-24 bg-gray-700 rounded-lg"></div>
+                            </div>
+                        </div>
+
+                        <div className="mt-4 w-full h-12 bg-gray-700 rounded-lg"></div>
+                    </div>
+
+                    {/* Certificates List Skeleton */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[1, 2, 3].map((item) => (
+                            <div
+                                key={item}
+                                className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden animate-pulse"
+                            >
+                                <div className="w-full h-48 bg-gray-700"></div>
+                                <div className="p-6">
+                                    <div className="h-8 bg-gray-700 mb-2 w-3/4"></div>
+                                    <div className="h-4 bg-gray-700 mb-4 w-full"></div>
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        <div className="h-6 bg-gray-700 w-20 rounded-md"></div>
+                                        <div className="h-6 bg-gray-700 w-20 rounded-md"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchCertificatesWithDelay = async () => {
+            setIsLoading(true)
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1500))
+
+                const { data, error } = await supabase
+                    .from('certificates')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+
+                if (error) {
+                    console.error('Error fetching certificates:', error)
+                } else {
+                    setCertificates(data || [])
+                }
+            } catch (error) {
+                console.error('Error:', error)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchCertificatesWithDelay()
+    }, [])
+
+    // Jika sedang loading, tampilkan skeleton
+    if (isLoading) {
+        return <CertificateSkeleton />
+    }
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
             <div className="container mx-auto">

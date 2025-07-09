@@ -446,6 +446,82 @@ const ManageSkills = () => {
         setNotification(null)
     }
 
+    const SkillsSkeleton = () => {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
+                <div className="container mx-auto">
+                    {/* Skeleton Add Skill Button */}
+                    <div className="mb-6 h-10 w-48 bg-gray-800 rounded-lg animate-pulse"></div>
+
+                    {/* Skills Categories Skeleton */}
+                    {['Frontend', 'Backend', 'Mobile'].map((category) => (
+                        <div key={category} className="mb-8">
+                            <div className="h-10 w-64 bg-gray-800 rounded-lg mb-4 animate-pulse"></div>
+                            <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-6">
+                                {[1, 2, 3, 4, 5, 6].map((item) => (
+                                    <div
+                                        key={item}
+                                        className="bg-gray-800 border border-gray-700 rounded-2xl p-4 flex flex-col items-center animate-pulse"
+                                    >
+                                        <div className="w-16 h-16 mb-2 bg-gray-700 rounded-full"></div>
+                                        <div className="h-6 w-3/4 bg-gray-700 mb-2 rounded"></div>
+                                        <div className="flex space-x-2 mt-2">
+                                            <div className="h-8 w-16 bg-gray-700 rounded-lg"></div>
+                                            <div className="h-8 w-16 bg-gray-700 rounded-lg"></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )
+    }
+
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchSkillsWithDelay = async () => {
+            setIsLoading(true)
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1500))
+
+                const { data, error } = await supabase
+                    .from('skills')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+
+                if (error) {
+                    console.error('Error fetching skills:', error)
+                } else {
+                    const groupedSkills = data.reduce((acc, skill) => {
+                        if (!acc[skill.category]) {
+                            acc[skill.category] = []
+                        }
+                        acc[skill.category].push(skill)
+                        return acc
+                    }, { frontend: [], backend: [], mobile: [] })
+
+                    setSkills(groupedSkills)
+                }
+            } catch (error) {
+                console.error('Error:', error)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchSkillsWithDelay()
+    }, [])
+
+    // Jika sedang loading, tampilkan skeleton
+    if (isLoading) {
+        return <SkillsSkeleton />
+    }
+
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
             {/* Modal Komponen */}
