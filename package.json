@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/fiber": "^8.18.0",
     "@supabase/supabase-js": "^2.50.3",
     "framer-motion": "^12.23.0",
     "react": "^18.3.1",
@@ -19,8 +20,7 @@
     "react-tsparticles": "^2.12.2",
     "tsparticles": "^3.8.1",
     "tsparticles-engine": "^2.12.0",
-    "uuid": "^11.1.0",
-    "vanta": "^0.5.24"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
