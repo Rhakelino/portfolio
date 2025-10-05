@@ -5,7 +5,7 @@ import SkillsSection from "./components/SkillsSection";
 import CertificatesSection from "./components/CertificatesSection";
 import ThemeToggle from "./components/ThemeToggle";
 import Footer from "./components/Footer";
-import { projectsData, skillsData, certificatesData } from "./data/data";
+
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(
@@ -27,9 +27,9 @@ function App() {
       <div className="container mx-auto px-4 md:px-8 max-w-6xl">
         <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
         <Header />
-        <ProjectSection projects={projectsData} />
-        <SkillsSection skills={skillsData} />
-        <CertificatesSection certificates={certificatesData} />
+        <ProjectSection />
+        <SkillsSection />
+        <CertificatesSection />
         <Footer />
       </div>
     </div>
