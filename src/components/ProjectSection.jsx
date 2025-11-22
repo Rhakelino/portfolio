@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { supabase } from "../supabaseClient";
+import OptimizedImage from "./OptimizedImage";
 
 // Komponen Skeleton (tetap sama)
 const ProjectSkeleton = () => {
@@ -141,10 +142,14 @@ const ProjectSection = () => {
                 whileHover={{ scale: 1.05 }}
                 className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg overflow-hidden"
               >
-                <img
+                <OptimizedImage
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48"
+                  width={600}
+                  height={400}
+                  quality={80}
+                  objectFit="cover"
                 />
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2">{project.title}</h3>
