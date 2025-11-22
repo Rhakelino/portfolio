@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
 import { supabase } from "../supabaseClient";
-import OptimizedImage from "./OptimizedImage";
 
 // Komponen Skeleton
 const CertificatesSkeleton = () => {
@@ -102,14 +101,10 @@ const CertificatesSection = () => {
               <FaTimes className="text-3xl" />
             </button>
 
-            <OptimizedImage
+            <img
               src={certificate.image}
               alt={certificate.title}
-              className="w-full h-auto max-h-[90vh] rounded-lg"
-              width={1200}
-              height={900}
-              quality={90}
-              objectFit="contain"
+              className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
             />
           </motion.div>
         </motion.div>
@@ -153,14 +148,10 @@ const CertificatesSection = () => {
               className="bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-xl transform transition-all duration-300 flex flex-col"
             >
               <div className="relative h-64 overflow-hidden">
-                <OptimizedImage
+                <img
                   src={certificate.image}
                   alt={certificate.title}
-                  className="w-full h-full"
-                  width={600}
-                  height={400}
-                  quality={75}
-                  objectFit="cover"
+                  className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
                   <h3 className="text-2xl font-bold">{certificate.title}</h3>
