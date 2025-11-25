@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
+import { useTheme } from '../contexts/ThemeContext'
 
 // Custom Hook untuk Animasi Counting dengan optimasi
 const useCountUp = (end, duration = 2000) => {
@@ -31,6 +32,7 @@ const useCountUp = (end, duration = 2000) => {
 
 const Dashboard = () => {
   const navigate = useNavigate()
+  const { isDarkMode, setIsDarkMode } = useTheme()
   const [userProfile, setUserProfile] = useState(null)
   const [projectCount, setProjectCount] = useState(0)
   const [certificateCount, setCertificateCount] = useState(0)

@@ -8,25 +8,25 @@ const CertificatesSkeleton = () => {
   return (
     <section className="py-16">
       <div className="text-center mb-12">
-        <div className="h-12 w-64 mx-auto bg-gray-300 dark:bg-neutral-700 animate-pulse rounded-lg"></div>
+        <div className="h-12 w-64 mx-auto bg-muted animate-pulse rounded-lg"></div>
       </div>
       <div className="grid md:grid-cols-2 gap-8">
         {[1, 2, 3, 4].map((item) => (
           <div
             key={item}
-            className="bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-xl animate-pulse"
+            className="bg-card rounded-2xl overflow-hidden shadow-xl animate-pulse border border-border"
           >
-            <div className="w-full h-64 bg-gray-300 dark:bg-neutral-700"></div>
+            <div className="w-full h-64 bg-muted"></div>
             <div className="p-6">
-              <div className="h-6 w-3/4 bg-gray-300 dark:bg-neutral-700 mb-2"></div>
-              <div className="h-4 w-1/2 bg-gray-300 dark:bg-neutral-700 mb-4"></div>
+              <div className="h-6 w-3/4 bg-muted mb-2"></div>
+              <div className="h-4 w-1/2 bg-muted mb-4"></div>
               <div className="flex gap-2 mb-4">
-                <div className="h-4 w-16 bg-gray-300 dark:bg-neutral-700 rounded-full"></div>
-                <div className="h-4 w-16 bg-gray-300 dark:bg-neutral-700 rounded-full"></div>
+                <div className="h-4 w-16 bg-muted rounded-full"></div>
+                <div className="h-4 w-16 bg-muted rounded-full"></div>
               </div>
               <div className="flex justify-between items-center">
-                <div className="h-4 w-24 bg-gray-300 dark:bg-neutral-700"></div>
-                <div className="h-8 w-24 bg-gray-300 dark:bg-neutral-700 rounded-lg"></div>
+                <div className="h-4 w-24 bg-muted"></div>
+                <div className="h-8 w-24 bg-muted rounded-lg"></div>
               </div>
             </div>
           </div>
@@ -128,24 +128,20 @@ const CertificatesSection = () => {
 
   return (
     <section className="py-16">
-      <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+      <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
         Certificates
       </h2>
 
       {certificates.length === 0 ? (
-        <div className="text-center text-gray-500">
+        <div className="text-center text-muted-foreground">
           No certificates available
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-8">
           {certificates.map((certificate, index) => (
-            <motion.div
+            <div
               key={index}
-              whileHover={{
-                scale: 1.03,
-                boxShadow: "0 15px 30px rgba(0,0,0,0.1)",
-              }}
-              className="bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-xl transform transition-all duration-300 flex flex-col"
+              className="bg-card rounded-2xl overflow-hidden shadow-xl transform transition-all duration-300 hover:scale-103 flex flex-col border border-border"
             >
               <div className="relative h-64 overflow-hidden">
                 <img
@@ -160,7 +156,7 @@ const CertificatesSection = () => {
               </div>
 
               <div className="p-6 flex-grow">
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                <p className="text-muted-foreground mb-4">
                   {certificate.description}
                 </p>
 
@@ -168,7 +164,7 @@ const CertificatesSection = () => {
                   {certificate.skills.map((skill, skillIndex) => (
                     <span
                       key={skillIndex}
-                      className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-xs"
+                      className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-xs border border-border"
                     >
                       {skill}
                     </span>
@@ -176,18 +172,18 @@ const CertificatesSection = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Issued: {certificate.date}
+                  <span className="text-sm text-muted-foreground">
+                    {certificate.date}
                   </span>
                   <button
                     onClick={() => openCertificateModal(certificate)}
-                    className="btn btn-sm btn-outline btn-primary"
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
                   >
                     View Certificate
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       )}

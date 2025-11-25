@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { v4 as uuidv4 } from 'uuid'
+import ThemeToggle from '../components/ThemeToggle'
+import { useTheme } from '../contexts/ThemeContext'
 
 // Modal Komponen
 const EditProjectModal = ({
@@ -38,8 +40,8 @@ const EditProjectModal = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 w-full max-w-2xl">
-        <h2 className="text-3xl font-bold mb-6 text-white">Edit Proyek</h2>
+      <div className="bg-card border border-border rounded-2xl p-8 w-full max-w-2xl">
+        <h2 className="text-3xl font-bold mb-6 text-foreground">Edit Proyek</h2>
 
         <form onSubmit={(e) => onUpdate(e, editedProject)} className="space-y-4">
           <div className="grid md:grid-cols-3 gap-4">
@@ -66,7 +68,7 @@ const EditProjectModal = ({
                 />
                 <label
                   htmlFor="editImageUpload"
-                  className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-2 rounded-lg text-center cursor-pointer hover:scale-105 transition-transform"
+                  className="w-full bg-primary text-primary-foreground py-2 rounded-lg text-center cursor-pointer hover:bg-primary/90 transition-colors"
                 >
                   {imagePreview ? 'Change Image' : 'Upload Image'}
                 </label>
@@ -80,7 +82,7 @@ const EditProjectModal = ({
                 placeholder="Project Title"
                 value={editedProject.title}
                 onChange={(e) => setEditedProject({ ...editedProject, title: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg col-span-2"
+                className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                 required
               />
               <input
@@ -88,7 +90,7 @@ const EditProjectModal = ({
                 placeholder="Technologies (comma-separated)"
                 value={editedProject.technologies}
                 onChange={(e) => setEditedProject({ ...editedProject, technologies: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg"
+                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
                 required
               />
               <input
@@ -96,7 +98,7 @@ const EditProjectModal = ({
                 placeholder="GitHub Link"
                 value={editedProject.githubLink}
                 onChange={(e) => setEditedProject({ ...editedProject, githubLink: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg"
+                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
               />
               <input
                 type="text"
@@ -192,6 +194,7 @@ const ProjectSkeleton = () => {
 
 // Komponen Utama ManageProjects
 const ManageProjects = () => {
+  const { isDarkMode, setIsDarkMode } = useTheme()
   const [projects, setProjects] = useState([])
   const [imageFile, setImageFile] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)

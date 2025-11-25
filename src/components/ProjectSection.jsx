@@ -8,25 +8,25 @@ const ProjectSkeleton = () => {
   return (
     <section className="py-16">
       <div className="text-center mb-12">
-        <div className="h-12 w-64 mx-auto bg-gray-300 dark:bg-neutral-700 animate-pulse rounded-lg"></div>
+        <div className="h-12 w-64 mx-auto bg-muted animate-pulse rounded-lg"></div>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[1, 2, 3].map((item) => (
           <div 
             key={item}
-            className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg overflow-hidden animate-pulse"
+            className="bg-card rounded-xl shadow-lg overflow-hidden animate-pulse border border-border"
           >
-            <div className="w-full h-48 bg-gray-300 dark:bg-neutral-700"></div>
+            <div className="w-full h-48 bg-muted"></div>
             <div className="p-6">
-              <div className="h-6 w-3/4 bg-gray-300 dark:bg-neutral-700 mb-2"></div>
-              <div className="h-4 w-full bg-gray-300 dark:bg-neutral-700 mb-4"></div>
+              <div className="h-6 w-3/4 bg-muted mb-2"></div>
+              <div className="h-4 w-full bg-muted mb-4"></div>
               <div className="flex gap-2 mb-4">
-                <div className="h-4 w-16 bg-gray-300 dark:bg-neutral-700 rounded-full"></div>
-                <div className="h-4 w-16 bg-gray-300 dark:bg-neutral-700 rounded-full"></div>
+                <div className="h-4 w-16 bg-muted rounded-full"></div>
+                <div className="h-4 w-16 bg-muted rounded-full"></div>
               </div>
               <div className="flex gap-4">
-                <div className="h-8 w-24 bg-gray-300 dark:bg-neutral-700 rounded-lg"></div>
-                <div className="h-8 w-24 bg-gray-300 dark:bg-neutral-700 rounded-lg"></div>
+                <div className="h-8 w-24 bg-muted rounded-lg"></div>
+                <div className="h-8 w-24 bg-muted rounded-lg"></div>
               </div>
             </div>
           </div>
@@ -124,49 +124,48 @@ const ProjectSection = () => {
 
   return (
     <section className="py-16">
-      <h2 className="text-4xl py-2 font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+      <h2 className="text-4xl py-2 font-bold text-center mb-12 text-foreground">
         My Projects
       </h2>
 
       {projects.length === 0 ? (
-        <div className="text-center text-gray-500">
+        <div className="text-center text-muted-foreground">
           No projects available
         </div>
       ) : (
         <>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-              <motion.div
+              <div
                 key={project.id}
-                whileHover={{ scale: 1.05 }}
-                className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg overflow-hidden"
+                className="bg-card rounded-xl shadow-lg border border-border overflow-hidden transition-all duration-200 hover:scale-105 flex flex-col h-full"
               >
                 <img
                   src={project.image}
                   alt={project.title}
                   className="w-full h-48 object-cover"
                 />
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold mb-2 text-card-foreground line-clamp-2 min-h-[3.5rem]">{project.title}</h3>
+                  <p className="text-muted-foreground mb-4 line-clamp-3 flex-grow">
                     {project.description}
                   </p>
-                  <div className="flex gap-2 mb-4 flex-wrap">
+                  <div className="flex gap-2 mb-4 flex-wrap min-h-[2rem]">
                     {project.technologies.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-purple-100 dark:bg-neutral-800 text-xs rounded-full"
+                        className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full border border-border h-fit"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 mt-auto">
                     <a
                       href={project.github_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-outline btn-sm"
+                      className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
                     >
                       <FaGithub className="mr-2" /> GitHub
                     </a>
@@ -174,13 +173,13 @@ const ProjectSection = () => {
                       href={project.live_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-primary btn-sm dark:btn-warning"
+                      className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-3"
                     >
                       <FaEye className="mr-2" /> Live Demo
                     </a>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -190,17 +189,17 @@ const ProjectSection = () => {
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="btn btn-outline btn-primary"
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 disabled:opacity-50"
               >
                 <FaChevronLeft className="mr-2" /> Previous
               </button>
-              <div className="btn btn-ghost">
+              <div className="inline-flex items-center justify-center text-sm font-medium text-foreground h-10 px-4">
                 Page {currentPage} of {totalPages}
               </div>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="btn btn-outline btn-primary"
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 disabled:opacity-50"
               >
                 Next <FaChevronRight className="ml-2" />
               </button>

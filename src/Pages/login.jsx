@@ -42,18 +42,16 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center px-4 py-8">
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-purple-900/20 to-indigo-900/20 opacity-50 pointer-events-none"></div>
-      
-      <div className="relative z-10 w-full max-w-md bg-gray-800/60 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8 transition-colors duration-200">
+      <div className="relative z-10 w-full max-w-md bg-card backdrop-blur-lg rounded-2xl shadow-2xl border border-border overflow-hidden">
         <div className="p-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-2">Welcome Back King</h2>
-            <p className="text-gray-400">Sign in to continue</p>
+            <h2 className="text-3xl font-bold text-foreground mb-2">Welcome Back</h2>
+            <p className="text-muted-foreground">Sign in to continue</p>
           </div>
 
           {error && (
-            <div className="bg-red-500/20 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg mb-6 flex items-center">
+            <div className="bg-destructive/20 border border-destructive/50 text-destructive-foreground px-4 py-3 rounded-lg mb-6 flex items-center">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="h-6 w-6 mr-2" 
@@ -69,19 +67,19 @@ const Login = () => {
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-gray-300 mb-2">Email Address</label>
+              <label className="block text-foreground mb-2">Email Address</label>
               <div className="relative">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-700/50 text-white rounded-lg border border-gray-600/50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                  className="w-full px-4 py-3 bg-input text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-ring transition duration-300"
                   placeholder="Enter your email"
                   required
                 />
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
-                  className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
+                  className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" 
                   viewBox="0 0 20 20" 
                   fill="currentColor"
                 >
@@ -92,13 +90,13 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-gray-300 mb-2">Password</label>
+              <label className="block text-foreground mb-2">Password</label>
               <div className="relative">
                 <input
                   type={isPasswordVisible ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-700/50 text-white rounded-lg border border-gray-600/50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                  className="w-full px-4 py-3 bg-input text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-ring transition duration-300"
                   placeholder="Enter your password"
                   required
                 />
@@ -110,7 +108,7 @@ const Login = () => {
                   {isPasswordVisible ? (
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
-                      className="h-5 w-5 text-gray-400" 
+                      className="h-5 w-5 text-muted-foreground" 
                       viewBox="0 0 20 20" 
                       fill="currentColor"
                     >
@@ -120,7 +118,7 @@ const Login = () => {
                   ) : (
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
-                      className="h-5 w-5 text-gray-400" 
+                      className="h-5 w-5 text-muted-foreground" 
                       viewBox="0 0 20 20" 
                       fill="currentColor"
                     >
@@ -134,7 +132,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+              className="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8"
             >
               Sign In
             </button>
@@ -143,7 +141,7 @@ const Login = () => {
           <div className="text-center mt-6">
             <a 
               href="#" 
-              className="text-gray-400 hover:text-white transition duration-300"
+              className="text-muted-foreground hover:text-foreground transition duration-300"
             >
               Forgot Password?
             </a>

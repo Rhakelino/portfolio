@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { supabase } from '../supabaseClient'
 import { v4 as uuidv4 } from 'uuid'
+import ThemeToggle from '../components/ThemeToggle'
+import { useTheme } from '../contexts/ThemeContext'
 
 const ManageSkills = () => {
+    const { isDarkMode, setIsDarkMode } = useTheme()
     const [skills, setSkills] = useState({
         frontend: [],
         backend: [],
@@ -296,10 +299,10 @@ const ManageSkills = () => {
                 onClick={() => setIsModalOpen(false)}
             >
                 <div
-                    className="bg-gray-800 rounded-2xl p-8 w-full max-w-md mx-4"
+                    className="bg-card rounded-2xl p-8 w-full max-w-md mx-4"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <h2 className="text-2xl font-bold mb-6 text-white">
+                    <h2 className="text-2xl font-bold mb-6 text-foreground">
                         {editingSkill ? 'Edit Skill' : 'Tambah Skill'}
                     </h2>
 
@@ -316,7 +319,7 @@ const ManageSkills = () => {
                                         name: e.target.value
                                     }))
                                 }}
-                                className="w-full p-3 bg-gray-700 text-white rounded-lg"
+                                className="w-full p-3 bg-secondary text-foreground rounded-lg"
                                 required
                                 autoFocus
                                 autoComplete="off"
@@ -332,7 +335,7 @@ const ManageSkills = () => {
                                         category: e.target.value
                                     }))
                                 }}
-                                className="w-full p-3 bg-gray-700 text-white rounded-lg"
+                                className="w-full p-3 bg-secondary text-foreground rounded-lg"
                             >
                                 <option value="frontend">Frontend</option>
                                 <option value="backend">Backend</option>
@@ -350,7 +353,7 @@ const ManageSkills = () => {
                             />
                             <label
                                 htmlFor="modalIconUpload"
-                                className="w-full bg-gray-700 text-white p-3 rounded-lg cursor-pointer text-center block"
+                                className="w-full bg-secondary text-foreground p-3 rounded-lg cursor-pointer text-center block"
                             >
                                 {imagePreview ? 'Change Icon' : 'Upload Icon'}
                             </label>
@@ -368,7 +371,7 @@ const ManageSkills = () => {
                             <button
                                 type="submit"
                                 disabled={uploading}
-                                className={`w-full bg-green-500 text-white p-3 rounded-lg
+                                className={`w-full bg-green-500 text-foreground p-3 rounded-lg
                   ${uploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'}`}
                             >
                                 {uploading ? 'Processing...' : (editingSkill ? 'Update' : 'Add')}
@@ -376,7 +379,7 @@ const ManageSkills = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsModalOpen(false)}
-                                className="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600"
+                                className="w-full bg-red-500 text-foreground p-3 rounded-lg hover:bg-red-600"
                             >
                                 Cancel
                             </button>
@@ -393,7 +396,7 @@ const ManageSkills = () => {
                 <div
                     className="
           bg-gradient-to-r from-purple-500 to-indigo-600 
-          text-white 
+          text-foreground 
           px-10 py-6 
           rounded-xl 
           shadow-2xl 
@@ -448,26 +451,26 @@ const ManageSkills = () => {
 
     const SkillsSkeleton = () => {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-foreground p-8">
                 <div className="container mx-auto">
                     {/* Skeleton Add Skill Button */}
-                    <div className="mb-6 h-10 w-48 bg-gray-800 rounded-lg animate-pulse"></div>
+                    <div className="mb-6 h-10 w-48 bg-card rounded-lg animate-pulse"></div>
 
                     {/* Skills Categories Skeleton */}
                     {['Frontend', 'Backend', 'Mobile'].map((category) => (
                         <div key={category} className="mb-8">
-                            <div className="h-10 w-64 bg-gray-800 rounded-lg mb-4 animate-pulse"></div>
+                            <div className="h-10 w-64 bg-card rounded-lg mb-4 animate-pulse"></div>
                             <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-6">
                                 {[1, 2, 3, 4, 5, 6].map((item) => (
                                     <div
                                         key={item}
-                                        className="bg-gray-800 border border-gray-700 rounded-2xl p-4 flex flex-col items-center animate-pulse"
+                                        className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center animate-pulse"
                                     >
-                                        <div className="w-16 h-16 mb-2 bg-gray-700 rounded-full"></div>
-                                        <div className="h-6 w-3/4 bg-gray-700 mb-2 rounded"></div>
+                                        <div className="w-16 h-16 mb-2 bg-secondary rounded-full"></div>
+                                        <div className="h-6 w-3/4 bg-secondary mb-2 rounded"></div>
                                         <div className="flex space-x-2 mt-2">
-                                            <div className="h-8 w-16 bg-gray-700 rounded-lg"></div>
-                                            <div className="h-8 w-16 bg-gray-700 rounded-lg"></div>
+                                            <div className="h-8 w-16 bg-secondary rounded-lg"></div>
+                                            <div className="h-8 w-16 bg-secondary rounded-lg"></div>
                                         </div>
                                     </div>
                                 ))}
@@ -523,7 +526,7 @@ const ManageSkills = () => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-foreground p-8">
             {/* Modal Komponen */}
             {isModalOpen && <SkillModal />}
 
@@ -537,7 +540,7 @@ const ManageSkills = () => {
                 )}
                 <button
                     onClick={openModal}
-                    className="mb-6 bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-4 py-2 rounded-lg"
+                    className="mb-6 bg-primary text-foreground px-4 py-2 rounded-lg"
                 >
                     Tambah Skill Baru
                 </button>
@@ -552,7 +555,7 @@ const ManageSkills = () => {
                             {skills[category].map((skill) => (
                                 <div
                                     key={skill.id}
-                                    className="bg-gray-800 border border-gray-700 rounded-2xl p-4 flex flex-col items-center"
+                                    className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center"
                                 >
                                     <img
                                         src={skill.icon}
@@ -563,13 +566,13 @@ const ManageSkills = () => {
                                     <div className="flex space-x-2">
                                         <button
                                             onClick={() => handleEditSkill(skill)}
-                                            className="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600"
+                                            className="bg-yellow-500 text-foreground px-3 py-1 rounded-lg hover:bg-yellow-600"
                                         >
                                             Edit
                                         </button>
                                         <button
                                             onClick={() => handleDeleteSkill(skill.id)}
-                                            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
+                                            className="bg-red-500 text-foreground px-3 py-1 rounded-lg hover:bg-red-600"
                                         >
                                             Delete
                                         </button>
