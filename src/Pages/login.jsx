@@ -73,7 +73,7 @@ const Login = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-input text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-ring transition duration-300"
+                  className="w-full px-4 py-3 bg-secondary text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-ring transition duration-300"
                   placeholder="Enter your email"
                   required
                 />
@@ -96,7 +96,7 @@ const Login = () => {
                   type={isPasswordVisible ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-input text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-ring transition duration-300"
+                  className="w-full px-4 py-3 bg-secondary text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-ring transition duration-300"
                   placeholder="Enter your password"
                   required
                 />

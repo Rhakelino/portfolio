@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient'
 import { v4 as uuidv4 } from 'uuid'
 import ThemeToggle from '../components/ThemeToggle'
 import { useTheme } from '../contexts/ThemeContext'
+import { handleImageCompression, projectImageOptions } from '../utils/imageCompression'
 
 // Modal Komponen
 const EditProjectModal = ({
@@ -40,14 +41,14 @@ const EditProjectModal = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-card border border-border rounded-2xl p-8 w-full max-w-2xl">
-        <h2 className="text-3xl font-bold mb-6 text-foreground">Edit Proyek</h2>
+      <div className="bg-card border border-border rounded-2xl p-8 w-full max-w-2xl text-foreground">
+        <h2 className="text-3xl font-bold mb-6">Edit Proyek</h2>
 
         <form onSubmit={(e) => onUpdate(e, editedProject)} className="space-y-4">
           <div className="grid md:grid-cols-3 gap-4">
             {/* Image Upload Section */}
             <div className="md:col-span-1">
-              <div className="bg-gray-700 rounded-lg p-4 flex flex-col items-center">
+              <div className="bg-secondary rounded-lg p-4 flex flex-col items-center">
                 {imagePreview ? (
                   <img
                     src={imagePreview}
@@ -55,7 +56,7 @@ const EditProjectModal = ({
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-600 rounded-lg mb-4 flex items-center justify-center">
+                  <div className="w-full h-48 bg-muted rounded-lg mb-4 flex items-center justify-center">
                     No image selected
                   </div>
                 )}
@@ -105,13 +106,13 @@ const EditProjectModal = ({
                 placeholder="Live Link"
                 value={editedProject.liveLink}
                 onChange={(e) => setEditedProject({ ...editedProject, liveLink: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg"
+                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
               />
               <textarea
                 placeholder="Project Description"
                 value={editedProject.description}
                 onChange={(e) => setEditedProject({ ...editedProject, description: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg col-span-2"
+                className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                 required
               />
             </div>
@@ -121,7 +122,7 @@ const EditProjectModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500"
+              className="bg-muted text-foreground px-4 py-2 rounded-lg hover:bg-secondary/80"
             >
               Batal
             </button>
@@ -141,46 +142,46 @@ const EditProjectModal = ({
 
 const ProjectSkeleton = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
+    <div className="min-h-screen bg-background text-foreground p-8">
       <div className="container mx-auto">
         {/* Skeleton for Add Project Form */}
-        <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 mb-8 animate-pulse">
+        <div className="bg-card border border-border rounded-2xl p-6 mb-8 animate-pulse">
           <div className="grid md:grid-cols-3 gap-4">
             {/* Image Upload Skeleton */}
             <div className="md:col-span-1">
-              <div className="bg-gray-700 rounded-lg p-4 flex flex-col items-center">
-                <div className="w-full h-48 bg-gray-600 rounded-lg mb-4"></div>
-                <div className="w-full h-10 bg-gray-600 rounded-lg"></div>
+              <div className="bg-secondary rounded-lg p-4 flex flex-col items-center">
+                <div className="w-full h-48 bg-muted rounded-lg mb-4"></div>
+                <div className="w-full h-10 bg-muted rounded-lg"></div>
               </div>
             </div>
 
             {/* Project Details Skeleton */}
             <div className="md:col-span-2 grid grid-cols-2 gap-4">
-              <div className="col-span-2 h-12 bg-gray-700 rounded-lg"></div>
-              <div className="h-12 bg-gray-700 rounded-lg"></div>
-              <div className="h-12 bg-gray-700 rounded-lg"></div>
-              <div className="h-12 bg-gray-700 rounded-lg"></div>
-              <div className="col-span-2 h-24 bg-gray-700 rounded-lg"></div>
+              <div className="col-span-2 h-12 bg-secondary rounded-lg"></div>
+              <div className="h-12 bg-secondary rounded-lg"></div>
+              <div className="h-12 bg-secondary rounded-lg"></div>
+              <div className="h-12 bg-secondary rounded-lg"></div>
+              <div className="col-span-2 h-24 bg-secondary rounded-lg"></div>
             </div>
           </div>
 
-          <div className="mt-4 w-full h-12 bg-gray-700 rounded-lg"></div>
+          <div className="mt-4 w-full h-12 bg-secondary rounded-lg"></div>
         </div>
 
         {/* Projects List Skeleton */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((item) => (
-            <div 
-              key={item} 
-              className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden animate-pulse"
+            <div
+              key={item}
+              className="bg-card border border-border rounded-2xl overflow-hidden animate-pulse"
             >
-              <div className="w-full h-48 bg-gray-700"></div>
+              <div className="w-full h-48 bg-secondary"></div>
               <div className="p-6">
-                <div className="h-8 bg-gray-700 mb-2 w-3/4"></div>
-                <div className="h-4 bg-gray-700 mb-4 w-full"></div>
+                <div className="h-8 bg-secondary mb-2 w-3/4"></div>
+                <div className="h-4 bg-secondary mb-4 w-full"></div>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <div className="h-6 bg-gray-700 w-20 rounded-md"></div>
-                  <div className="h-6 bg-gray-700 w-20 rounded-md"></div>
+                  <div className="h-6 bg-secondary w-20 rounded-md"></div>
+                  <div className="h-6 bg-secondary w-20 rounded-md"></div>
                 </div>
               </div>
             </div>
@@ -211,15 +212,15 @@ const ManageProjects = () => {
     liveLink: ''
   })
 
-const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchProjectsWithDelay = async () => {
       setIsLoading(true)
       try {
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1500))
-        
+        // Removed fake loading 
+        // await new Promise(resolve => setTimeout(resolve, 1500))
+
         const { data, error } = await supabase
           .from('projects')
           .select('*')
@@ -227,11 +228,13 @@ const [isLoading, setIsLoading] = useState(true)
 
         if (error) {
           console.error('Error fetching projects:', error)
+          setNotification('Gagal mengambil daftar proyek')
         } else {
           setProjects(data || [])
         }
       } catch (error) {
         console.error('Error:', error)
+        setNotification('Terjadi kesalahan saat memuat data')
       } finally {
         setIsLoading(false)
       }
@@ -258,19 +261,26 @@ const [isLoading, setIsLoading] = useState(true)
     }
   }
 
-  // Handle Image Upload
-  const handleImageUpload = (e) => {
+  // Handle Image Upload with Compression
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0]
     if (file) {
-      // Preview image
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result)
-      }
-      reader.readAsDataURL(file)
+      try {
+        const compressedFile = await handleImageCompression(file, projectImageOptions)
 
-      // Set file for upload
-      setImageFile(file)
+        // Preview compressed image
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          setImagePreview(reader.result)
+        }
+        reader.readAsDataURL(compressedFile)
+
+        // Set file for upload
+        setImageFile(compressedFile)
+      } catch (error) {
+        console.error('Error compressing image:', error)
+        setNotification('Gagal mengompres gambar')
+      }
     }
   }
 
@@ -387,9 +397,19 @@ const [isLoading, setIsLoading] = useState(true)
     setUploading(true)
 
     try {
-      // Upload new image if exists
+      // Upload new image if exists and delete old image
       let imageUrl = updatedProject.image
       if (imageFile) {
+        // Delete old image if it exists and is different from new one (implied by uploading new one)
+        if (editingProject.image) {
+          const oldFileName = editingProject.image.split('/').pop()
+          if (oldFileName) {
+            await supabase.storage
+              .from('project-images')
+              .remove([oldFileName])
+          }
+        }
+
         imageUrl = await uploadImage(imageFile)
         if (!imageUrl) {
           setNotification('Gagal mengupload gambar')
@@ -559,7 +579,7 @@ const [isLoading, setIsLoading] = useState(true)
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-8">
+    <div className="min-h-screen bg-background text-foreground p-8">
       <div className="container mx-auto">
         {/* Notification */}
         {notification && (
@@ -575,12 +595,12 @@ const [isLoading, setIsLoading] = useState(true)
 
         <form
           onSubmit={handleAddProject}
-          className="bg-gray-800 border border-gray-700 rounded-2xl p-6 mb-8"
+          className="bg-card border border-border rounded-2xl p-6 mb-8"
         >
           <div className="grid md:grid-cols-3 gap-4">
             {/* Image Upload Section */}
             <div className="md:col-span-1">
-              <div className="bg-gray-700 rounded-lg p-4 flex flex-col items-center">
+              <div className="bg-secondary rounded-lg p-4 flex flex-col items-center">
                 {imagePreview ? (
                   <img
                     src={imagePreview}
@@ -588,7 +608,7 @@ const [isLoading, setIsLoading] = useState(true)
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-600 rounded-lg mb-4 flex items-center justify-center">
+                  <div className="w-full h-48 bg-muted rounded-lg mb-4 flex items-center justify-center">
                     No image selected
                   </div>
                 )}
@@ -615,7 +635,7 @@ const [isLoading, setIsLoading] = useState(true)
                 placeholder="Project Title"
                 value={newProject.title}
                 onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg col-span-2"
+                className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                 required
               />
               <input
@@ -623,7 +643,7 @@ const [isLoading, setIsLoading] = useState(true)
                 placeholder="Technologies (comma-separated)"
                 value={newProject.technologies}
                 onChange={(e) => setNewProject({ ...newProject, technologies: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg"
+                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
                 required
               />
               <input
@@ -631,20 +651,20 @@ const [isLoading, setIsLoading] = useState(true)
                 placeholder="GitHub Link"
                 value={newProject.githubLink}
                 onChange={(e) => setNewProject({ ...newProject, githubLink: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg"
+                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
               />
               <input
                 type="text"
                 placeholder="Live Link"
                 value={newProject.liveLink}
                 onChange={(e) => setNewProject({ ...newProject, liveLink: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg"
+                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
               />
               <textarea
                 placeholder="Project Description"
                 value={newProject.description}
                 onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                className="bg-gray-700 text-white p-3 rounded-lg col-span-2"
+                className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                 required
               />
             </div>
@@ -661,12 +681,12 @@ const [isLoading, setIsLoading] = useState(true)
 
         {/* Projects List */}
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-8 text-center">My Projects</h1>
+          <h1 className="text-3xl font-bold mb-8 text-center text-foreground">My Projects</h1>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden relative"
+                className="bg-card border border-border rounded-2xl overflow-hidden relative shadow-lg hover:shadow-xl transition-shadow"
               >
                 <img
                   src={project.image}
@@ -692,13 +712,13 @@ const [isLoading, setIsLoading] = useState(true)
                   </button>
                 </div>
                 <div className="p-6">
-                  <h2 className="text-2xl font-bold mb-2">{project.title}</h2>
-                  <p className="text-gray-400 mb-4">{project.description}</p>
+                  <h2 className="text-2xl font-bold mb-2 text-foreground">{project.title}</h2>
+                  <p className="text-muted-foreground mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech, index) => (
                       <span
                         key={index}
-                        className="bg-gray-700 px-2 py-1 rounded-md text-sm"
+                        className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md text-sm border border-border"
                       >
                         {tech}
                       </span>
@@ -729,4 +749,3 @@ const [isLoading, setIsLoading] = useState(true)
 }
 
 export default ManageProjects
-

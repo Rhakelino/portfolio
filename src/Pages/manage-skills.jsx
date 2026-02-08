@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient'
 import { v4 as uuidv4 } from 'uuid'
 import ThemeToggle from '../components/ThemeToggle'
 import { useTheme } from '../contexts/ThemeContext'
+import { handleImageCompression, skillImageOptions } from '../utils/imageCompression'
 
 const ManageSkills = () => {
     const { isDarkMode, setIsDarkMode } = useTheme()
@@ -37,7 +38,40 @@ const ManageSkills = () => {
 
     // Fetch Skills
     useEffect(() => {
-        fetchSkills()
+        const fetchSkillsWithDelay = async () => {
+            setIsLoading(true)
+            try {
+                // Removed fake loading
+                // await new Promise(resolve => setTimeout(resolve, 1500))
+
+                const { data, error } = await supabase
+                    .from('skills')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+
+                if (error) {
+                    console.error('Error fetching skills:', error)
+                    setNotification('Gagal mengambil daftar skills')
+                } else {
+                    const groupedSkills = data.reduce((acc, skill) => {
+                        if (!acc[skill.category]) {
+                            acc[skill.category] = []
+                        }
+                        acc[skill.category].push(skill)
+                        return acc
+                    }, { frontend: [], backend: [], mobile: [] })
+
+                    setSkills(groupedSkills)
+                }
+            } catch (error) {
+                console.error('Error:', error)
+                setNotification('Terjadi kesalahan saat memuat data')
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchSkillsWithDelay()
     }, [])
 
     const fetchSkills = async () => {
@@ -62,16 +96,26 @@ const ManageSkills = () => {
         }
     }
 
-    // Handle Image Upload
-    const handleImageUpload = (e) => {
+    // Handle Image Upload with Compression
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0]
         if (file) {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setImagePreview(reader.result)
+            try {
+                const compressedFile = await handleImageCompression(file, skillImageOptions)
+
+                // Preview image
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setImagePreview(reader.result)
+                }
+                reader.readAsDataURL(compressedFile)
+
+                // Set file for upload
+                setImageFile(compressedFile)
+            } catch (error) {
+                console.error('Error compressing image:', error)
+                setNotification('Gagal mengompres gambar')
             }
-            reader.readAsDataURL(file)
-            setImageFile(file)
         }
     }
 
@@ -201,6 +245,16 @@ const ManageSkills = () => {
         try {
             let iconUrl = editingSkill.icon
             if (imageFile) {
+                // Delete old image if it exists and is different from new one (implied by uploading new one)
+                if (editingSkill.icon) {
+                    const oldFileName = editingSkill.icon.split('/').pop()
+                    if (oldFileName) {
+                        await supabase.storage
+                            .from('skill-icons')
+                            .remove([oldFileName])
+                    }
+                }
+
                 iconUrl = await uploadImage(imageFile)
                 if (!iconUrl) {
                     setNotification('Gagal mengupload icon')
@@ -299,7 +353,7 @@ const ManageSkills = () => {
                 onClick={() => setIsModalOpen(false)}
             >
                 <div
-                    className="bg-card rounded-2xl p-8 w-full max-w-md mx-4"
+                    className="bg-card rounded-2xl p-8 w-full max-w-md mx-4 border border-border"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <h2 className="text-2xl font-bold mb-6 text-foreground">
@@ -319,7 +373,7 @@ const ManageSkills = () => {
                                         name: e.target.value
                                     }))
                                 }}
-                                className="w-full p-3 bg-secondary text-foreground rounded-lg"
+                                className="w-full p-3 bg-secondary text-foreground rounded-lg border border-border focus:ring-2 focus:ring-ring"
                                 required
                                 autoFocus
                                 autoComplete="off"
@@ -335,7 +389,7 @@ const ManageSkills = () => {
                                         category: e.target.value
                                     }))
                                 }}
-                                className="w-full p-3 bg-secondary text-foreground rounded-lg"
+                                className="w-full p-3 bg-secondary text-foreground rounded-lg border border-border focus:ring-2 focus:ring-ring"
                             >
                                 <option value="frontend">Frontend</option>
                                 <option value="backend">Backend</option>
@@ -353,7 +407,7 @@ const ManageSkills = () => {
                             />
                             <label
                                 htmlFor="modalIconUpload"
-                                className="w-full bg-secondary text-foreground p-3 rounded-lg cursor-pointer text-center block"
+                                className="w-full bg-secondary text-foreground p-3 rounded-lg cursor-pointer text-center block border border-border hover:bg-secondary/80"
                             >
                                 {imagePreview ? 'Change Icon' : 'Upload Icon'}
                             </label>
@@ -371,7 +425,7 @@ const ManageSkills = () => {
                             <button
                                 type="submit"
                                 disabled={uploading}
-                                className={`w-full bg-green-500 text-foreground p-3 rounded-lg
+                                className={`w-full bg-green-500 text-white p-3 rounded-lg
                   ${uploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'}`}
                             >
                                 {uploading ? 'Processing...' : (editingSkill ? 'Update' : 'Add')}
@@ -379,7 +433,7 @@ const ManageSkills = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsModalOpen(false)}
-                                className="w-full bg-red-500 text-foreground p-3 rounded-lg hover:bg-red-600"
+                                className="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600"
                             >
                                 Cancel
                             </button>
@@ -396,7 +450,7 @@ const ManageSkills = () => {
                 <div
                     className="
           bg-gradient-to-r from-purple-500 to-indigo-600 
-          text-foreground 
+          text-white 
           px-10 py-6 
           rounded-xl 
           shadow-2xl 
@@ -451,7 +505,7 @@ const ManageSkills = () => {
 
     const SkillsSkeleton = () => {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-foreground p-8">
+            <div className="min-h-screen bg-background text-foreground p-8">
                 <div className="container mx-auto">
                     {/* Skeleton Add Skill Button */}
                     <div className="mb-6 h-10 w-48 bg-card rounded-lg animate-pulse"></div>
@@ -484,41 +538,6 @@ const ManageSkills = () => {
 
     const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
-        const fetchSkillsWithDelay = async () => {
-            setIsLoading(true)
-            try {
-                // Simulate network delay
-                await new Promise(resolve => setTimeout(resolve, 1500))
-
-                const { data, error } = await supabase
-                    .from('skills')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-
-                if (error) {
-                    console.error('Error fetching skills:', error)
-                } else {
-                    const groupedSkills = data.reduce((acc, skill) => {
-                        if (!acc[skill.category]) {
-                            acc[skill.category] = []
-                        }
-                        acc[skill.category].push(skill)
-                        return acc
-                    }, { frontend: [], backend: [], mobile: [] })
-
-                    setSkills(groupedSkills)
-                }
-            } catch (error) {
-                console.error('Error:', error)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
-        fetchSkillsWithDelay()
-    }, [])
-
     // Jika sedang loading, tampilkan skeleton
     if (isLoading) {
         return <SkillsSkeleton />
@@ -526,7 +545,7 @@ const ManageSkills = () => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-foreground p-8">
+        <div className="min-h-screen bg-background text-foreground p-8">
             {/* Modal Komponen */}
             {isModalOpen && <SkillModal />}
 
@@ -540,7 +559,7 @@ const ManageSkills = () => {
                 )}
                 <button
                     onClick={openModal}
-                    className="mb-6 bg-primary text-foreground px-4 py-2 rounded-lg"
+                    className="mb-6 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
                 >
                     Tambah Skill Baru
                 </button>
@@ -548,31 +567,31 @@ const ManageSkills = () => {
                 {/* Skills by Category */}
                 {Object.keys(skills).map((category) => (
                     <div key={category} className="mb-8">
-                        <h2 className="text-3xl font-bold mb-4 capitalize">
+                        <h2 className="text-3xl font-bold mb-4 capitalize text-foreground">
                             {category} Skills
                         </h2>
                         <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-6">
                             {skills[category].map((skill) => (
                                 <div
                                     key={skill.id}
-                                    className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center"
+                                    className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center shadow-lg hover:shadow-xl transition-shadow"
                                 >
                                     <img
                                         src={skill.icon}
                                         alt={skill.name}
                                         className="w-16 h-16 mb-2 object-contain"
                                     />
-                                    <h3 className="text-lg font-semibold mb-2">{skill.name}</h3>
+                                    <h3 className="text-lg font-semibold mb-2 text-foreground">{skill.name}</h3>
                                     <div className="flex space-x-2">
                                         <button
                                             onClick={() => handleEditSkill(skill)}
-                                            className="bg-yellow-500 text-foreground px-3 py-1 rounded-lg hover:bg-yellow-600"
+                                            className="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600"
                                         >
                                             Edit
                                         </button>
                                         <button
                                             onClick={() => handleDeleteSkill(skill.id)}
-                                            className="bg-red-500 text-foreground px-3 py-1 rounded-lg hover:bg-red-600"
+                                            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
                                         >
                                             Delete
                                         </button>

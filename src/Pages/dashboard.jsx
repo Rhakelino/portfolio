@@ -103,13 +103,13 @@ const Dashboard = () => {
 
   // Loading Skeleton untuk Quick Stats
   const StatsSkeleton = () => (
-    <div className="mt-12 bg-gray-800 border border-gray-700 rounded-2xl p-6 animate-pulse">
-      <div className="h-8 bg-gray-700 rounded w-1/2 mb-4"></div>
+    <div className="mt-12 bg-card border border-border rounded-2xl p-6 animate-pulse">
+      <div className="h-8 bg-secondary rounded w-1/2 mb-4"></div>
       <div className="grid md:grid-cols-3 gap-4">
         {[1, 2, 3].map((item) => (
-          <div key={item} className="bg-gray-700 rounded-lg p-4">
-            <div className="h-4 bg-gray-600 rounded w-1/2 mb-2"></div>
-            <div className="h-8 bg-gray-600 rounded w-3/4"></div>
+          <div key={item} className="bg-secondary rounded-lg p-4">
+            <div className="h-4 bg-muted rounded w-1/2 mb-2"></div>
+            <div className="h-8 bg-muted rounded w-3/4"></div>
           </div>
         ))}
       </div>
@@ -122,11 +122,11 @@ const Dashboard = () => {
       {[1, 2, 3].map((item) => (
         <div
           key={item}
-          className="bg-gray-800 border border-gray-700 rounded-2xl p-6 flex flex-col items-start"
+          className="bg-card border border-border rounded-2xl p-6 flex flex-col items-start"
         >
-          <div className="mb-4 bg-gray-700 rounded-full h-12 w-12"></div>
-          <div className="h-8 bg-gray-700 rounded w-3/4 mb-2"></div>
-          <div className="h-5 bg-gray-700 rounded w-full"></div>
+          <div className="mb-4 bg-secondary rounded-full h-12 w-12"></div>
+          <div className="h-8 bg-secondary rounded w-3/4 mb-2"></div>
+          <div className="h-5 bg-secondary rounded w-full"></div>
         </div>
       ))}
     </div>
@@ -139,9 +139,9 @@ const Dashboard = () => {
       to: '/manage-projects',
       icon: (
         <div className="bg-purple-500/20 p-3 rounded-full">
-           <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-        </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
         </div>
       )
     },
@@ -152,8 +152,8 @@ const Dashboard = () => {
       icon: (
         <div className="bg-green-500/20 p-3 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-        </svg>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
         </div>
       )
     },
@@ -163,16 +163,16 @@ const Dashboard = () => {
       to: '/manage-skills',
       icon: (
         <div className="bg-blue-500/20 p-3 rounded-full">
-         <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-        </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
         </div>
       )
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
@@ -181,14 +181,14 @@ const Dashboard = () => {
               Admin Dashboard
             </h1>
             {userProfile && (
-              <p className="text-gray-400 mt-2">
+              <p className="text-muted-foreground mt-2">
                 Welcome, {userProfile.email}
               </p>
             )}
           </div>
           <button
             onClick={handleLogout}
-            className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:scale-105 transition-transform flex items-center space-x-2"
+            className="bg-destructive text-destructive-foreground px-6 py-3 rounded-lg hover:scale-105 transition-transform flex items-center space-x-2 border border-destructive/20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L14.586 11H7a1 1 0 110-2h7.586l-1.293-1.293a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -206,11 +206,11 @@ const Dashboard = () => {
               <Link
                 key={index}
                 to={item.to}
-                className="bg-gray-800 border border-gray-700 rounded-2xl p-6 hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex flex-col items-start"
+                className="bg-card border border-border rounded-2xl p-6 hover:bg-secondary transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex flex-col items-start text-foreground"
               >
                 <div className="mb-4">{item.icon}</div>
-                <h2 className="text-2xl font-bold mb-2 text-white">{item.title}</h2>
-                <p className="text-gray-400">{item.description}</p>
+                <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
+                <p className="text-muted-foreground">{item.description}</p>
               </Link>
             ))}
           </div>
@@ -220,26 +220,26 @@ const Dashboard = () => {
         {isLoading ? (
           <StatsSkeleton />
         ) : (
-          <div className="mt-12 bg-gray-800 border border-gray-700 rounded-2xl p-6">
+          <div className="mt-12 bg-card border border-border rounded-2xl p-6">
             <h3 className="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-green-500">
               Quick Stats
             </h3>
             <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-gray-700 rounded-lg p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                <h4 className="text-gray-400">Total Projects</h4>
-                <p className="text-3xl font-bold text-white transition-colors duration-500 hover:text-blue-400">
+              <div className="bg-secondary/50 rounded-lg p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border">
+                <h4 className="text-muted-foreground">Total Projects</h4>
+                <p className="text-3xl font-bold text-foreground transition-colors duration-500 hover:text-blue-400">
                   {animatedProjectCount}
                 </p>
               </div>
-              <div className="bg-gray-700 rounded-lg p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                <h4 className="text-gray-400">Certificates</h4>
-                <p className="text-3xl font-bold text-white transition-colors duration-500 hover:text-green-400">
+              <div className="bg-secondary/50 rounded-lg p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border">
+                <h4 className="text-muted-foreground">Certificates</h4>
+                <p className="text-3xl font-bold text-foreground transition-colors duration-500 hover:text-green-400">
                   {animatedCertificateCount}
                 </p>
               </div>
-              <div className="bg-gray-700 rounded-lg p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                <h4 className="text-gray-400">Skills</h4>
-                <p className="text-3xl font-bold text-white transition-colors duration-500 hover:text-purple-400">
+              <div className="bg-secondary/50 rounded-lg p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border">
+                <h4 className="text-muted-foreground">Skills</h4>
+                <p className="text-3xl font-bold text-foreground transition-colors duration-500 hover:text-purple-400">
                   {animatedSkillCount}
                 </p>
               </div>

@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient'
 import { v4 as uuidv4 } from 'uuid'
 import ThemeToggle from '../components/ThemeToggle'
 import { useTheme } from '../contexts/ThemeContext'
+import { handleImageCompression, certificateImageOptions } from '../utils/imageCompression'
 
 const ManageCertificates = () => {
     const { isDarkMode, setIsDarkMode } = useTheme()
@@ -41,16 +42,26 @@ const ManageCertificates = () => {
         }
     }
 
-    // Handle Image Upload
-    const handleImageUpload = (e) => {
+    // Handle Image Upload with Compression
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0]
         if (file) {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setImagePreview(reader.result)
+            try {
+                const compressedFile = await handleImageCompression(file, certificateImageOptions)
+
+                // Preview image
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setImagePreview(reader.result)
+                }
+                reader.readAsDataURL(compressedFile)
+
+                // Set file for upload
+                setImageFile(compressedFile)
+            } catch (error) {
+                console.error('Error compressing image:', error)
+                setNotification('Gagal mengompres gambar')
             }
-            reader.readAsDataURL(file)
-            setImageFile(file)
         }
     }
 
@@ -164,6 +175,16 @@ const ManageCertificates = () => {
         try {
             let imageUrl = updatedCertificate.image
             if (imageFile) {
+                // Delete old image if it exists and is different from new one (implied by uploading new one)
+                if (editingCertificate.image) {
+                    const oldFileName = editingCertificate.image.split('/').pop()
+                    if (oldFileName) {
+                        await supabase.storage
+                            .from('certificate-images')
+                            .remove([oldFileName])
+                    }
+                }
+
                 imageUrl = await uploadImage(imageFile)
                 if (!imageUrl) {
                     setNotification('Gagal mengupload gambar')
@@ -267,7 +288,7 @@ const ManageCertificates = () => {
                 <div
                     className="
           bg-gradient-to-r from-purple-500 to-indigo-600 
-          text-foreground 
+          text-white 
           px-10 py-6 
           rounded-xl 
           shadow-2xl 
@@ -321,7 +342,7 @@ const ManageCertificates = () => {
 
     const CertificateSkeleton = () => {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-foreground p-8">
+            <div className="min-h-screen bg-background text-foreground p-8">
                 <div className="container mx-auto">
                     {/* Skeleton for Add Certificate Form */}
                     <div className="bg-card border border-border rounded-2xl p-6 mb-8 animate-pulse">
@@ -378,8 +399,8 @@ const ManageCertificates = () => {
         const fetchCertificatesWithDelay = async () => {
             setIsLoading(true)
             try {
-                // Simulate network delay
-                await new Promise(resolve => setTimeout(resolve, 1500))
+                // Removed fake loading
+                // await new Promise(resolve => setTimeout(resolve, 1500))
 
                 const { data, error } = await supabase
                     .from('certificates')
@@ -406,7 +427,7 @@ const ManageCertificates = () => {
         return <CertificateSkeleton />
     }
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-foreground p-8">
+        <div className="min-h-screen bg-background text-foreground p-8">
             <div className="container mx-auto">
                 {/* Notification */}
                 {notification && (
@@ -416,7 +437,7 @@ const ManageCertificates = () => {
                     />
                 )}
 
-                <h1 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-primary">
+                <h1 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-500">
                     Tambah Sertifikat
                 </h1>
 
@@ -448,7 +469,7 @@ const ManageCertificates = () => {
                                 />
                                 <label
                                     htmlFor="certificateImageUpload"
-                                    className="w-full bg-primary text-foreground py-2 rounded-lg text-center cursor-pointer hover:scale-105 transition-transform"
+                                    className="w-full bg-primary text-primary-foreground py-2 rounded-lg text-center cursor-pointer hover:scale-105 transition-transform"
                                 >
                                     {imagePreview ? 'Change Image' : 'Upload Image'}
                                 </label>
@@ -462,7 +483,7 @@ const ManageCertificates = () => {
                                 placeholder="Certificate Title"
                                 value={newCertificate.title}
                                 onChange={(e) => setNewCertificate({ ...newCertificate, title: e.target.value })}
-                                className="bg-secondary text-foreground p-3 rounded-lg col-span-2"
+                                className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                                 required
                             />
                             <input
@@ -470,7 +491,7 @@ const ManageCertificates = () => {
                                 placeholder="Provider"
                                 value={newCertificate.provider}
                                 onChange={(e) => setNewCertificate({ ...newCertificate, provider: e.target.value })}
-                                className="bg-secondary text-foreground p-3 rounded-lg"
+                                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
                                 required
                             />
                             <input
@@ -478,7 +499,7 @@ const ManageCertificates = () => {
                                 placeholder="Date"
                                 value={newCertificate.date}
                                 onChange={(e) => setNewCertificate({ ...newCertificate, date: e.target.value })}
-                                className="bg-secondary text-foreground p-3 rounded-lg"
+                                className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
                                 required
                             />
                             <input
@@ -486,14 +507,14 @@ const ManageCertificates = () => {
                                 placeholder="Skills (comma-separated)"
                                 value={newCertificate.skills}
                                 onChange={(e) => setNewCertificate({ ...newCertificate, skills: e.target.value })}
-                                className="bg-secondary text-foreground p-3 rounded-lg col-span-2"
+                                className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                                 required
                             />
                             <textarea
                                 placeholder="Description"
                                 value={newCertificate.description}
                                 onChange={(e) => setNewCertificate({ ...newCertificate, description: e.target.value })}
-                                className="bg-secondary text-foreground p-3 rounded-lg col-span-2"
+                                className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                                 rows="4"
                                 required
                             />
@@ -503,7 +524,7 @@ const ManageCertificates = () => {
                     <button
                         type="submit"
                         disabled={uploading}
-                        className={`mt-4 w-full bg-primary text-foreground p-3 rounded-lg transition-transform ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`mt-4 w-full bg-primary text-primary-foreground p-3 rounded-lg transition-transform ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         {uploading ? 'Processing...' : 'Add Certificate'}
                     </button>
@@ -514,7 +535,7 @@ const ManageCertificates = () => {
                     {certificates.map((certificate) => (
                         <div
                             key={certificate.id}
-                            className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg"
+                            className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                         >
                             <div className="relative">
                                 <img
@@ -525,7 +546,7 @@ const ManageCertificates = () => {
                                 <div className="absolute top-4 right-4 flex space-x-2">
                                     <button
                                         onClick={() => handleEditCertificate(certificate)}
-                                        className="bg-yellow-500 text-foreground p-2 rounded-full hover:bg-yellow-600 transition-colors"
+                                        className="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 transition-colors"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.379-8.379-2.828-2.828z" />
@@ -533,7 +554,7 @@ const ManageCertificates = () => {
                                     </button>
                                     <button
                                         onClick={() => handleDeleteCertificate(certificate.id)}
-                                        className="bg-red-500 text-foreground p-2 rounded-full hover:bg-red-600 transition-colors"
+                                        className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -542,13 +563,13 @@ const ManageCertificates = () => {
                                 </div>
                             </div>
                             <div className="p-6">
-                                <h3 className="text-xl font-bold mb-2 text-purple-400">
+                                <h3 className="text-xl font-bold mb-2 text-foreground">
                                     {certificate.title}
                                 </h3>
                                 <p className="text-sm text-muted-foreground mb-2">
                                     {certificate.provider} | {certificate.date}
                                 </p>
-                                <p className="text-sm text-gray-300 mb-4">
+                                <p className="text-sm text-muted-foreground mb-4">
                                     {certificate.description}
                                 </p>
                                 <div className="flex flex-wrap gap-2">
@@ -603,7 +624,7 @@ const ManageCertificates = () => {
                                             />
                                             <label
                                                 htmlFor="editCertificateImageUpload"
-                                                className="w-full bg-primary text-foreground py-2 rounded-lg text-center cursor-pointer hover:scale-105 transition-transform"
+                                                className="w-full bg-primary text-primary-foreground py-2 rounded-lg text-center cursor-pointer hover:scale-105 transition-transform"
                                             >
                                                 {imagePreview ? 'Change Image' : 'Upload Image'}
                                             </label>
@@ -620,7 +641,7 @@ const ManageCertificates = () => {
                                                 ...editingCertificate,
                                                 title: e.target.value
                                             })}
-                                            className="bg-secondary text-foreground p-3 rounded-lg col-span-2"
+                                            className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                                             required
                                         />
                                         <input
@@ -631,7 +652,7 @@ const ManageCertificates = () => {
                                                 ...editingCertificate,
                                                 provider: e.target.value
                                             })}
-                                            className="bg-secondary text-foreground p-3 rounded-lg"
+                                            className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
                                             required
                                         />
                                         <input
@@ -642,7 +663,7 @@ const ManageCertificates = () => {
                                                 ...editingCertificate,
                                                 date: e.target.value
                                             })}
-                                            className="bg-secondary text-foreground p-3 rounded-lg"
+                                            className="bg-input text-foreground p-3 rounded-lg border border-border focus:ring-2 focus:ring-ring"
                                             required
                                         />
                                         <input
@@ -653,7 +674,7 @@ const ManageCertificates = () => {
                                                 ...editingCertificate,
                                                 skills: e.target.value.split(',').map(skill => skill.trim())
                                             })}
-                                            className="bg-secondary text-foreground p-3 rounded-lg col-span-2"
+                                            className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                                             required
                                         />
                                         <textarea
@@ -663,7 +684,7 @@ const ManageCertificates = () => {
                                                 ...editingCertificate,
                                                 description: e.target.value
                                             })}
-                                            className="bg-secondary text-foreground p-3 rounded-lg col-span-2"
+                                            className="bg-input text-foreground p-3 rounded-lg col-span-2 border border-border focus:ring-2 focus:ring-ring"
                                             rows="4"
                                             required
                                         />
@@ -677,14 +698,14 @@ const ManageCertificates = () => {
                                             setIsEditModalOpen(false)
                                             resetForm()
                                         }}
-                                        className="bg-muted text-foreground px-4 py-2 rounded-lg hover:bg-gray-500"
+                                        className="bg-muted text-foreground px-4 py-2 rounded-lg hover:bg-secondary/80"
                                     >
                                         Batal
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={uploading}
-                                        className={`bg-primary text-foreground px-4 py-2 rounded-lg ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        className={`bg-primary text-primary-foreground px-4 py-2 rounded-lg ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     >
                                         {uploading ? 'Memperbarui...' : 'Perbarui Sertifikat'}
                                     </button>
