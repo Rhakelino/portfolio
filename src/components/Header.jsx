@@ -117,7 +117,7 @@ const Header = () => {
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
         onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
       >
-        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Scroll</span>
+        <span className="hidden md:block text-xs font-semibold text-muted-foreground uppercase tracking-widest">Scroll</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

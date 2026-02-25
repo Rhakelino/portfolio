@@ -102,6 +102,12 @@ const ProjectSection = () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
+
+      // Auto-scroll to the top of the section
+      const section = document.getElementById("projects");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -131,7 +137,7 @@ const ProjectSection = () => {
         transition={{ duration: 0.5 }}
         className="text-4xl py-2 font-bold text-center mb-12 text-foreground"
       >
-        My Projects
+        Projects Showcase
       </motion.h2>
 
       {projects.length === 0 ? (
@@ -140,30 +146,10 @@ const ProjectSection = () => {
         </div>
       ) : (
         <>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.15 }
-              }
-            }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-              <motion.div
+              <div
                 key={project.id}
-                variants={{
-                  hidden: { opacity: 0, y: 50 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.5, ease: "easeOut" }
-                  }
-                }}
                 className="bg-card rounded-xl shadow-lg border border-border overflow-hidden transition-all duration-200 hover:scale-105 flex flex-col h-full"
               >
                 <img
@@ -205,9 +191,9 @@ const ProjectSection = () => {
                     </a>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
