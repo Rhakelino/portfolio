@@ -12,7 +12,7 @@ const ProjectSkeleton = () => {
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[1, 2, 3].map((item) => (
-          <div 
+          <div
             key={item}
             className="bg-card rounded-xl shadow-lg overflow-hidden animate-pulse border border-border"
           >
@@ -40,7 +40,7 @@ const ProjectSection = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // State untuk pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProjects, setTotalProjects] = useState(0);
@@ -73,7 +73,7 @@ const ProjectSection = () => {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      
+
       // Hitung range untuk pagination
       const from = (currentPage - 1) * projectsPerPage;
       const to = from + projectsPerPage - 1;
@@ -123,10 +123,16 @@ const ProjectSection = () => {
   }
 
   return (
-    <section className="py-16">
-      <h2 className="text-4xl py-2 font-bold text-center mb-12 text-foreground">
+    <section className="py-16" id="projects">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="text-4xl py-2 font-bold text-center mb-12 text-foreground"
+      >
         My Projects
-      </h2>
+      </motion.h2>
 
       {projects.length === 0 ? (
         <div className="text-center text-muted-foreground">
@@ -134,16 +140,36 @@ const ProjectSection = () => {
         </div>
       ) : (
         <>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.15 }
+              }
+            }}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {projects.map((project) => (
-              <div
+              <motion.div
                 key={project.id}
+                variants={{
+                  hidden: { opacity: 0, y: 50 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.5, ease: "easeOut" }
+                  }
+                }}
                 className="bg-card rounded-xl shadow-lg border border-border overflow-hidden transition-all duration-200 hover:scale-105 flex flex-col h-full"
               >
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-48 object-cover"
+                  className="w-full md:h-72 h-fit object-cover object-top"
                 />
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-xl font-bold mb-2 text-card-foreground line-clamp-2 min-h-[3.5rem]">{project.title}</h3>
@@ -179,9 +205,9 @@ const ProjectSection = () => {
                     </a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Pagination */}
           {totalPages > 1 && (
